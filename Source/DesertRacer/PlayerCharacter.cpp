@@ -62,5 +62,23 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MoveActionValue = Value.Get<FVector2D>();
 	GEngine->AddOnScreenDebugMessage(1, 10.0f, FColor::White, MoveActionValue.ToString());
+
+	if (CanMove) {
+		if (abs(MoveActionValue.Y) > 0) {
+			float DeltaTime = GetWorld()->DeltaTimeSeconds;
+
+			if (abs(MoveActionValue.X) > 0) {
+				float RotationAmount = RotationSpeed * -MoveActionValue.X * DeltaTime;
+				AddActorWorldRotation(FRotator(RotationAmount, 0, 0));
+			}
+
+			FVector Location = GetActorLocation();
+			float FinalMovementSpeed = MoveActionValue.Y > 0 ? MovementSpeed : MovementSpeed * 0.5;
+
+			Location += GetActorUpVector() * MoveActionValue.Y * FinalMovementSpeed * DeltaTime;
+
+			SetActorLocation(Location);
+		}
+	}
 }
 
