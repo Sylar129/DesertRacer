@@ -3,13 +3,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
-#include "PaperSpriteComponent.h"
-
 #include "PlayerCharacter.generated.h"
+
+class UCapsuleComponent;
+class USpringArmComponent;
+class UCameraComponent;
+class UPaperSpriteComponent;
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
+
 
 UCLASS()
 class DESERTRACER_API APlayerCharacter : public APawn
@@ -29,6 +32,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperSpriteComponent* CarSprite;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UInputMappingContext* InputMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UInputAction* MoveAction;
+
 	APlayerCharacter();
 
 	virtual void BeginPlay() override;
@@ -37,4 +46,5 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Move(const FInputActionValue& Value);
 };

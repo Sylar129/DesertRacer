@@ -1,6 +1,17 @@
 
 #include "PlayerCharacter.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "PaperSpriteComponent.h"
+
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "Components/InputComponent.h"
+#include "InputActionValue.h"
+#include "GameFramework/Controller.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -22,6 +33,13 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if (PlayerController) {
+		UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+		if (SubSystem) {
+			SubSystem->AddMappingContext(InputMappingContext, 0);
+		}
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -34,5 +52,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (EnhancedInputComponent) {
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+	}
+}
+
+void APlayerCharacter::Move(const FInputActionValue& Value)
+{
+	FVector2D MoveActionValue = Value.Get<FVector2D>();
+	GEngine->AddOnScreenDebugMessage(1, 10.0f, FColor::White, MoveActionValue.ToString());
 }
 
