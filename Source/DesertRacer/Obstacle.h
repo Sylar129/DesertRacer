@@ -8,6 +8,8 @@
 class UCapsuleComponent;
 class UPaperSpriteComponent;
 
+class AMyGameMode;
+
 UCLASS()
 class DESERTRACER_API AObstacle : public AActor
 {
@@ -19,6 +21,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperSpriteComponent* ObstacleSprite;
+
+	AMyGameMode* MyGameMode;
 
 	AObstacle();
 
