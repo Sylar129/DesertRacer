@@ -4,7 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "PaperSpriteComponent.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Sound/SoundBase.h"
 #include "PlayerCharacter.h"
 #include "MyGameMode.h"
 
@@ -41,9 +41,14 @@ void AObstacle::OverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* Othe
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor);
 	if (Player) {
-		Player->CanMove = false;
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::White, TEXT("Overlapped with Player!"));
-		MyGameMode->ResetLevel(false);
+		if (Player->CanMove) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::White, TEXT("Overlapped with Player!"));
+			Player->CanMove = false;
+
+			UGameplayStatics::PlaySound2D(GetWorld(), HitSound);
+
+			MyGameMode->ResetLevel(IsFinishLine);
+		}
 	}
 }
 

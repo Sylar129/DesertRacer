@@ -7,6 +7,7 @@
 
 class UCapsuleComponent;
 class UPaperSpriteComponent;
+class USoundBase;
 
 class AMyGameMode;
 
@@ -21,6 +22,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperSpriteComponent* ObstacleSprite;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* HitSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsFinishLine;
 
 	AMyGameMode* MyGameMode;
 
